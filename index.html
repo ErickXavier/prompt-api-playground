@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Prompt API Playground</title>
+    <script>
+      if (!isSecureContext) location.protocol = "https:";
+    </script>
+    <script src="script.js" type="module"></script>
+  </head>
+  <body>
+    <div id="app-container">
+      <!-- Left Sidebar - Chat History -->
+      <aside id="left-sidebar" class="sidebar">
+        <div class="sidebar-collapsed-icons">
+          <button
+            id="collapsed-menu-btn"
+            class="collapsed-icon-btn"
+            title="Toggle sidebar"
+            aria-label="Toggle sidebar"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M2 4h16M2 10h16M2 16h16"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+          <button
+            id="collapsed-new-chat-btn"
+            class="collapsed-icon-btn"
+            title="New chat"
+            aria-label="New chat"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M14 2L4 12v4h4L18 6l-4-4zM3 17h14"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <header class="sidebar-header">
+          <button
+            id="left-sidebar-toggle"
+            class="header-icon-btn"
+            aria-label="Toggle sidebar"
+            title="Toggle sidebar"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M2 4h16M2 10h16M2 16h16"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+          <div class="sidebar-header-spacer"></div>
+          <button
+            id="new-chat-btn"
+            class="new-chat-btn"
+            title="New Chat"
+            aria-label="New Chat"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M14 2L4 12v4h4L18 6l-4-4zM3 17h14"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </header>
+
+        <div class="sidebar-search">
+          <input
+            type="text"
+            id="chat-search"
+            placeholder="Search chats..."
+            aria-label="Search chats"
+          />
+        </div>
+
+        <nav id="chat-history" aria-label="Chat history">
+          <menu class="chat-history-empty">
+            <p>No chat history yet</p>
+            <p class="hint">Start a new conversation</p>
+          </menu>
+        </nav>
+      </aside>
+
+      <!-- Main Chat Area -->
+      <main id="main-area">
+        <header id="chat-header">
+          <div class="header-left">
+            <button
+              id="show-left-sidebar"
+              class="icon-btn"
+              aria-label="Show chat history"
+              title="Show chat history"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2 4h16M2 10h16M2 16h16"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+            <h1 class="app-title-main">Prompt API</h1>
+          </div>
+          <h2 id="current-chat-title" contenteditable="true" spellcheck="false">
+            New Chat
+          </h2>
+          <div class="header-actions">
+            <button
+              id="info-btn"
+              class="icon-btn"
+              aria-label="About"
+              title="About"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="10"
+                  cy="10"
+                  r="8"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                />
+                <path
+                  d="M10 14v-4M10 6h.01"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <div id="messages-container">
+          <div class="welcome-message">
+            <h1>Prompt API Playground</h1>
+            <div id="welcome-content">
+              <p>
+                This is a demo of Chrome's built-in
+                <a href="https://developer.chrome.com/docs/ai/prompt-api"
+                  >Prompt API</a
+                >
+                powered by Gemini Nano.
+              </p>
+              <p>
+                Made by
+                <a
+                  href="https://github.com/ErickXavier/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >@ErickXavier</a
+                >. Source code on
+                <a
+                  href="https://github.com/ErickXavier/prompt-api-playground"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >GitHub</a
+                >.
+              </p>
+            </div>
+
+            <div id="setup-instructions" style="display: none;">
+              <p class="warning-text">⚠️ The Prompt API is not available in your browser.</p>
+
+              <h3>Setup Required</h3>
+
+              <ol class="setup-steps">
+                <li>
+                  <strong>Browser:</strong> Chrome Dev or Canary (version 128 or higher)
+                </li>
+                <li>
+                  <strong>Enable Required Flags:</strong>
+                  <ul>
+                    <li><strong>Prompt API for Gemini Nano:</strong> <code>Enabled</code><br><a href="chrome://flags/#prompt-api-for-gemini-nano" target="_blank">chrome://flags/#prompt-api-for-gemini-nano</a></li>
+                    <li><strong>Enables optimization guide on device:</strong> <code>Enabled BypassPerfRequirement</code><br><a href="chrome://flags/#optimization-guide-on-device-model" target="_blank">chrome://flags/#optimization-guide-on-device-model</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <strong>Download the AI Model:</strong> <a href="chrome://components" target="_blank">chrome://components</a>
+                  <ul>
+                    <li>Find "Optimization Guide On Device Model"</li>
+                    <li>Click "Check for update" to download Gemini Nano</li>
+                  </ul>
+                </li>
+                <li>
+                  <strong>Restart Chrome</strong> after enabling flags and downloading the model
+                </li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Existing response area kept for compatibility -->
+          <div id="response-area"></div>
+        </div>
+
+        <div id="input-area">
+          <div class="input-container">
+            <form id="message-form">
+              <!-- <button type="button" id="add-button" class="input-action-btn" aria-label="Add" title="Add">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button> -->
+              <textarea
+                id="prompt-input"
+                placeholder="Message Prompt API"
+                rows="1"
+                aria-label="Message input"
+              ></textarea>
+              <button
+                type="submit"
+                id="submit-button"
+                aria-label="Send message"
+                title="Send (Enter)"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M18 10L2 2l3 8-3 8 16-8z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </form>
+          </div>
+
+          <div id="quick-actions">
+            <span id="cost"></span>
+            <span id="token-info"></span>
+          </div>
+        </div>
+      </main>
+
+      <!-- Right Sidebar - Settings -->
+      <aside id="right-sidebar" class="sidebar">
+        <div class="sidebar-collapsed-icons">
+          <button
+            id="collapsed-settings-btn"
+            class="collapsed-icon-btn"
+            title="Settings"
+            aria-label="Settings"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M16.5 12.5a1.5 1.5 0 00.3 1.65l.05.05a1.82 1.82 0 010 2.58 1.82 1.82 0 01-2.58 0l-.05-.05a1.5 1.5 0 00-1.65-.3 1.5 1.5 0 00-.9 1.37v.15a1.82 1.82 0 01-3.64 0V18a1.5 1.5 0 00-.98-1.37 1.5 1.5 0 00-1.65.3l-.05.05a1.82 1.82 0 01-2.58-2.58l.05-.05a1.5 1.5 0 00.3-1.65 1.5 1.5 0 00-1.37-.9H2a1.82 1.82 0 010-3.64h.09a1.5 1.5 0 001.37-.98 1.5 1.5 0 00-.3-1.65l-.05-.05a1.82 1.82 0 112.58-2.58l.05.05a1.5 1.5 0 001.65.3H7.5a1.5 1.5 0 00.9-1.37V2a1.82 1.82 0 013.64 0v.09a1.5 1.5 0 00.9 1.37 1.5 1.5 0 001.65-.3l.05-.05a1.82 1.82 0 012.58 2.58l-.05.05a1.5 1.5 0 00-.3 1.65v.15a1.5 1.5 0 001.37.9H18a1.82 1.82 0 010 3.64h-.09a1.5 1.5 0 00-1.37.98z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <header class="sidebar-header">
+          <h3>Settings</h3>
+          <button
+            id="right-sidebar-toggle"
+            class="header-icon-btn"
+            aria-label="Toggle settings sidebar"
+            title="Toggle sidebar"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M16.5 12.5a1.5 1.5 0 00.3 1.65l.05.05a1.82 1.82 0 010 2.58 1.82 1.82 0 01-2.58 0l-.05-.05a1.5 1.5 0 00-1.65-.3 1.5 1.5 0 00-.9 1.37v.15a1.82 1.82 0 01-3.64 0V18a1.5 1.5 0 00-.98-1.37 1.5 1.5 0 00-1.65.3l-.05.05a1.82 1.82 0 01-2.58-2.58l.05-.05a1.5 1.5 0 00.3-1.65 1.5 1.5 0 00-1.37-.9H2a1.82 1.82 0 010-3.64h.09a1.5 1.5 0 001.37-.98 1.5 1.5 0 00-.3-1.65l-.05-.05a1.82 1.82 0 112.58-2.58l.05.05a1.5 1.5 0 001.65.3H7.5a1.5 1.5 0 00.9-1.37V2a1.82 1.82 0 013.64 0v.09a1.5 1.5 0 00.9 1.37 1.5 1.5 0 001.65-.3l.05-.05a1.82 1.82 0 012.58 2.58l-.05.05a1.5 1.5 0 00-.3 1.65v.15a1.5 1.5 0 001.37.9H18a1.82 1.82 0 010 3.64h-.09a1.5 1.5 0 00-1.37.98z"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </header>
+
+        <div class="sidebar-content">
+          <section class="settings-section">
+            <h4>Model Parameters</h4>
+
+            <div class="setting-item">
+              <label for="session-temperature">
+                Temperature
+                <span id="temperature-value" class="setting-value"></span>
+              </label>
+              <input
+                id="session-temperature"
+                type="range"
+                step="0.1"
+                min="0"
+                aria-label="Temperature"
+              />
+              <small class="setting-description"
+                >Controls randomness in responses</small
+              >
+            </div>
+
+            <div class="setting-item">
+              <label for="session-top-k">
+                Top-K
+                <span id="topk-value" class="setting-value"></span>
+              </label>
+              <input
+                id="session-top-k"
+                type="range"
+                step="1"
+                min="1"
+                max="128"
+                aria-label="Top-K"
+              />
+              <small class="setting-description"
+                >Limits token sampling pool</small
+              >
+            </div>
+          </section>
+
+          <section class="settings-section">
+            <h4>Session Statistics</h4>
+            <div id="session-stats">
+              <div class="stat-row">
+                <span class="stat-label">Temperature:</span>
+                <span id="temperature" class="stat-value">&nbsp;</span>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label">Top-K:</span>
+                <span id="top-k" class="stat-value">&nbsp;</span>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label">Tokens Used:</span>
+                <span id="tokens-so-far" class="stat-value">&nbsp;</span>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label">Tokens Left:</span>
+                <span id="tokens-left" class="stat-value">&nbsp;</span>
+              </div>
+              <div class="stat-row">
+                <span class="stat-label">Total Tokens:</span>
+                <span id="max-tokens" class="stat-value">&nbsp;</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="settings-section">
+            <h4>Actions</h4>
+            <button type="button" id="reset-button" class="action-btn">
+              Clear all Data
+            </button>
+            <button type="button" id="export-chat-btn" class="action-btn">
+              Export Chat
+            </button>
+            <button type="button" id="copy-link-button" class="action-btn">
+              Copy Link
+            </button>
+          </section>
+
+          <details class="settings-section collapsible">
+            <summary>Debug Information</summary>
+            <div class="debug-content">
+              <h5>Raw Response</h5>
+              <div class="raw-response"></div>
+            </div>
+          </details>
+        </div>
+      </aside>
+    </div>
+
+    <!-- About Modal -->
+    <dialog id="about-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>About Prompt API Playground</h2>
+          <button
+            id="close-modal"
+            class="icon-btn"
+            aria-label="Close"
+            title="Close"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 5l10 10M15 5l-10 10"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>
+            This is a demo of Chrome's built-in
+            <a
+              href="https://developer.chrome.com/docs/ai/prompt-api"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Prompt API</a
+            >
+            powered by Gemini Nano.
+          </p>
+          <p>
+            Made by
+            <a
+              href="https://github.com/ErickXavier/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >@ErickXavier</a
+            >. Source code on
+            <a
+              href="https://github.com/ErickXavier/prompt-api-playground"
+              target="_blank"
+              rel="noopener noreferrer"
+              >GitHub</a
+            >.
+          </p>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Custom Alert Dialog -->
+    <dialog id="alert-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p id="alert-message"></p>
+        </div>
+        <div class="dialog-actions">
+          <button id="alert-ok-btn" class="dialog-btn dialog-btn-primary">
+            OK
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Custom Confirm Dialog -->
+    <dialog id="confirm-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p id="confirm-message"></p>
+        </div>
+        <div class="dialog-actions">
+          <button id="confirm-cancel-btn" class="dialog-btn">Cancel</button>
+          <button id="confirm-ok-btn" class="dialog-btn dialog-btn-primary">
+            OK
+          </button>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Error message modal -->
+    <div id="error-message" class="modal" role="alert"></div>
+
+    <!-- Problematic area (kept for compatibility) -->
+    <div id="problematic-area">
+      <h2>Problematic:</h2>
+      <pre id="problem"></pre>
+    </div>
+
+    <!-- Legacy prompt area (hidden, kept for compatibility) -->
+    <div id="prompt-area" style="display: none"></div>
+  </body>
+</html>
