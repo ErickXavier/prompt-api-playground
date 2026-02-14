@@ -86,7 +86,7 @@ Open the right sidebar (settings icon) to customize:
 
 1. Click **Export Chat** in the settings sidebar
 2. Downloads the current conversation as a Markdown file
-3. Or use **Copy Link** to copy the conversation to clipboard
+3. Or use **Copy Chat** to copy the conversation to clipboard
 
 ### Keyboard Shortcuts
 
